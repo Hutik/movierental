@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -16,7 +17,7 @@ public class Film {
     String title;
     String description;
     Float price;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     Set<Category> categories = new HashSet<>();
     boolean newest;
     
