@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Code ###
+src/main/movierental.db/movierental.trace.db
