@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<body>
+	<header th:fragment="header">
+		<h1>Piękna robocza nazwa firmy</h1>
+	</header>
+
+	<nav th:fragment="navbar">
+		<div class="container-fluid">
+			<div>
+				<nav class="navbar navbar-expand navbar-light bg-light">
+					<a class="navbar-brand" th:href="@{/}"> <img
+						th:src="@{/images/logo.png}" style="width: 100px" />
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbarNav">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNav">
+						<ul class="navbar-nav" id="nav-links">
+							<li class="nav-item"><a class="nav-link active"
+								aria-current="page" href="/" th:text="#{homePage}" id="nav-link-home">Home page</a></li>
+							<li class="nav-item"><a class="nav-link"
+								th:href="@{warehouse}" th:text="#{warehouse}" id="nav-link-warehouse">Warehouse</a></li>
+							<li class="nav-item"><a class="nav-link"
+								th:href="@{orders}" th:text="#{orders}" id="nav-link-orders">Orders</a></li>
+							<li class="nav-item"><a class="nav-link" th:href="@{report}" id="nav-link-report" th:text="#{report}">Report</a></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+							<img th:src="@{/images/user_icon.png}" style="width: 30px; height: 30px; border-radius: 100%;" />
+							<span sec:authentication="principal.fullName"></span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenu2">
+						  <div class="dropdown-header">
+							  <img th:src="@{/images/user_icon.png}" style="width: 50px; height: 50px; border-radius: 100%;"/>
+						  </div>
+						  <li class="dropdown-item"><a class="nav-link"
+							th:href="@{settings}" th:text="#{settings}">Settings</a></li>
+						  <li class="dropdown-item">
+							<form action="/logout" method="post">
+								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+								<input type="submit" class="btn" data-dismiss="modal" th:value="#{logout}" />
+							</form>
+						</ul>
+					</div>
+			</div>
+	</nav>
+
+	<footer th:fragment="footer">
+		<p>&copy; 2021 Kowalewski Mariusz</p>
+	</footer>
+</body>
+</html>
