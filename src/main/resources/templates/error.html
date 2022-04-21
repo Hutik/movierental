@@ -7,19 +7,15 @@
 </head>
 <body>
 	<div th:replace="fragments/components :: navbar"></div>
-	<div class="container">
-
-		<div th:insert="fragments/components :: header"></div>
+	<div class="container">		
 		</br>
-		
-		</br>
-		<div class="card">
-			<div class="card-header">Błąd</div>
+		<div class="card" th:with="httpStatus=${T(org.springframework.http.HttpStatus).valueOf(#response.status)}">
+			<div class="card-header"><h1 th:text="|${httpStatus} - ${httpStatus.reasonPhrase}|">404</h1></div>
 			<div class="card-body">
 				<h5 class="card-title">
 					<p>Brak strony lub wytąpił nioczekiwany błąd serwera.</p>
 					<p>Proszę wrócić na poprzednią stronę</p>
-					<br/>
+					<hr/>
 					<a href="javascript:history.back()" class="btn btn-primary" th:text="#{previouspage}">Previous Page</a>
 			</div>
 		</div>
