@@ -1,13 +1,17 @@
 package pl.kowalewskislodkowski.movierental.entities;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table
@@ -17,8 +21,11 @@ public class User {
     @Column(unique=true)
     String username;
     String password;
-    @ManyToMany
-    Set<Role> roles;
+    @ManyToMany(fetch=FetchType.LAZY)
+    @JoinTable(name="user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    Set<Role> role = new HashSet<Role>();
     @Column(unique=true)
     String email;
     Date dateOfBirth;
@@ -42,10 +49,10 @@ public class User {
         this.password = password;
     }
     public Set<Role> getRoles() {
-        return roles;
+        return role;
     }
     public void setRoles(Set<Role> roles) {
-        this.roles = roles;
+        this.role = roles;
     }
     public String getEmail() {
         return email;
