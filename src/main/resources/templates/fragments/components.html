@@ -1,10 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <body>
-	<header th:fragment="header">
-		<h1>Piękna robocza nazwa firmy</h1>
-	</header>
-
 	<nav th:fragment="navbar">
 		<div class="container-fluid">
 			<div>
@@ -27,15 +23,11 @@
 							<li class="nav-item"><a class="nav-link" th:href="@{report}" id="nav-link-report" th:text="#{report}">Report</a></li>
 						</ul>
 					</div>
-					<div class="dropdown">
+					<div class="dropdown" sec:authorize="isAuthenticated()">
 						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-							<img th:src="@{/images/user_icon.png}" style="width: 30px; height: 30px; border-radius: 100%;" />
-							<span sec:authentication="principal.fullName"></span>
+							<span sec:authentication="principal.username">Username</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenu2">
-						  <div class="dropdown-header">
-							  <img th:src="@{/images/user_icon.png}" style="width: 50px; height: 50px; border-radius: 100%;"/>
-						  </div>
 						  <li class="dropdown-item"><a class="nav-link"
 							th:href="@{settings}" th:text="#{settings}">Settings</a></li>
 						  <li class="dropdown-item">
