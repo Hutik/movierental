@@ -3,6 +3,7 @@ package pl.kowalewskislodkowski.movierental.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,10 +28,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests().antMatchers("/images/*").permitAll()
             .and()
+            .authorizeRequests().antMatchers(HttpMethod.GET, "/films").permitAll()
+            .and()
+            .authorizeRequests().antMatchers(HttpMethod.GET, "/films/*").permitAll()
+            .and()
             .authorizeRequests().anyRequest().authenticated()
+            // .and()
+            // .authorizeRequests().anyRequest().rememberMe()
             .and()
             .formLogin()
-            .loginPage("/login").loginProcessingUrl("/perform_login")
+            .loginPage("/login").loginProcessingUrl("/perform_login").defaultSuccessUrl("/")
             .permitAll()
             .and()
             .logout().permitAll();

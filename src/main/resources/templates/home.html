@@ -9,78 +9,43 @@
 	<div th:replace="fragments/components :: navbar"></div>
 	<div class="container">
 		</br>
-		<div class="row row-cols-1 row-cols-md-3 g-4">
-			<div class="col">
-			  <div class="card h-100">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-				</div>
-				<div class="card-footer">
-					<button style="width: 100%" type="button" class="btn btn-primary">Primary</button>
-				</div>
-			  </div>
-			</div>
-			<div class="col">
-			  <div class="card h-100">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-				</div>
-				<div class="card-footer">
-					<button style="width: 100%" type="button" class="btn btn-primary">Primary</button>
-				</div>
-			  </div>
-			</div>
-			<div class="col">
-			  <div class="card h-100">
-				<div class="card-body">
-				  <h5 class="card-title">Card title</h5>
-				  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-				</div>
-				<div class="card-footer">
-					<button style="width: 100%" type="button" class="btn btn-primary">Primary</button>
-				</div>
-			  </div>
-			</div>
-			<div class="col">
-				<div class="card h-100">
-				  <div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-				  </div>
-				  <div class="card-footer">
-					  <button style="width: 100%" type="button" class="btn btn-primary">Primary</button>
-				  </div>
-				</div>
-			  </div>
-			  <div class="col">
-				<div class="card h-100">
-				  <div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-				  </div>
-				  <div class="card-footer">
-					  <button style="width: 100%" type="button" class="btn btn-primary">Primary</button>
-				  </div>
-				</div>
-			  </div>
-			  <div class="col">
-				<div class="card h-100">
-				  <div class="card-body">
-					<h5 class="card-title">Card title</h5>
-					<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-				  </div>
-				  <div class="card-footer">
-					  <button style="width: 100%" type="button" class="btn btn-primary">Primary</button>
-				  </div>
-				</div>
-			  </div>
-		  </div>
+		<div id="films" class="row row-cols-4 row-cols-md-4 g-4"></div>
 		</br>
 		<div th:include="fragments/components :: footer"></div>
 	</div>
 	<script>
+
+		fetch('/films')
+    		.then(processOkResponse)
+    		.then(films => {
+        		var movies = films.map(film => {
+            		return `<div class="col">
+								<div class="card h-100">
+									<div class="card-body">
+				  						<h5 class="card-title">${film.title}</h5>
+				  						<p class="card-text">${film.description}</p>
+									</div>
+									<div class="card-footer" style="background: white">
+										${film.categories.map(category => {return `<button type="button" class="btn btn-outline-secondary btn-sm">${category.name}</button>`}).join("\n")}
+									</div>
+									<div class="card-footer">
+										<button type="button" class="btn btn-primary">Primary</button>
+										<small style="width: 100%" class="text-muted text-right">${film.price}</small>
+									</div>
+								</div>
+							</div>`
+        		}).join("\n");
+
+				document.getElementById('films').innerHTML=movies;
+    });
+
+
+		function processOkResponse(response = {}) {
+    		if (response.ok)
+      			return response.json();
+    		
+    		throw new Error(`Status not 200 (${response.status})`);
+  		}
 	</script>
 </body>
 </html>
