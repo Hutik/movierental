@@ -23,6 +23,7 @@
 							<li class="nav-item"><a class="nav-link" th:href="@{report}" id="nav-link-report" th:text="#{report}">Report</a></li>
 						</ul>
 					</div>
+					<button sec:authorize="!isAuthenticated()" type="button" class="btn btn-dark" th:text="#{login}" onclick="location.href='/login'">Login</button>
 					<div class="dropdown" sec:authorize="isAuthenticated()">
 						<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
 							<span sec:authentication="principal.username">Username</span>
