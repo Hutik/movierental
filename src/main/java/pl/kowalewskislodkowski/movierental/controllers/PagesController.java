@@ -16,4 +16,9 @@ public class PagesController {
 		return "login";
 	}
 
+	@GetMapping("/sellerPanel")
+	public String toSellerPanel(){
+		return "sellerPanel/sellerPanel";
+	}
+
 }

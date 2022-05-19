@@ -40,12 +40,31 @@
     });
 
 
-		function processOkResponse(response = {}) {
-    		if (response.ok)
-      			return response.json();
+	function processOkResponse(response = {}) {
+		if (response.ok)
+      		return response.json();
     		
-    		throw new Error(`Status not 200 (${response.status})`);
-  		}
+    	throw new Error(`Status not 200 (${response.status})`);
+  	}
+
+	function clientRegister(id) {
+
+		const XHR = new XMLHttpRequest();
+
+var dataToSend = document.querySelector("clientForm").serialize();
+
+XHR.addEventListener( 'load', function(event) {
+  alert( 'Klient zarejestrowany!');
+});
+XHR.addEventListener( 'error', function(event) {
+  alert( 'Coś poszło nie tak' );
+} );
+
+XHR.open( 'Put', `/users` );
+XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+XHR.send(dataToSend);
+}
+
 	</script>
 </body>
 </html>

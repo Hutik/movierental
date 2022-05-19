@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
+        <title th:text="#{appName}">Movie Rental - VOP P</title>
+        <meta th:name="_csrf" th:content="${_csrf.token}"/>
+        <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </head>
+<body>
+	<div th:replace="fragments/components :: navbar"></div>
+	<nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="clients-tab" data-bs-toggle="tab" data-bs-target="#nav-clients" type="button" role="tab" aria-controls="nav-clients" aria-selected="true" th:text="#{clients}">Clients</button>
+          <button class="nav-link" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false" th:text="#{registerClient}">Register Client</button>
+          <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+        </div>
+    </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-clients" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="container">
+                <label hidden th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id=csrf></label>
+                <table th:replace="sellerPanel/panels :: clients-table"></table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
+            <div class="container">
+                <form th:replace="sellerPanel/panels :: client-register"></form>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+            ...
+        </div>
+      </div>
+      <script th:inline="javascript">
+            fetch("/users/clients")
+            .then(processOkResponse)
+            .then(clients => {
+                document.getElementById('rows-clients-table').innerHTML = clients.map(client => {
+                return `<tr>
+                    <th scope="row">${client.id}</th>
+                    <td>${client.username}</td>
+                    <td>${client.name}</td>
+                    <td>${client.lastName}</td>
+                    <td>${client.email}</td>
+                    <td>${client.dateOfBirth}</td>
+                    <td><button type="button" class="btn btn-outline-danger" th:text="#{remove}" onclick="removeClient(${client.id})">Remove</button></td>
+                </tr>
+            `}).join('\n');
+            });
+
+            function removeClient(id){
+                const XHR = new XMLHttpRequest();
+  		
+		        XHR.addEventListener( 'load', function(event) {
+    	        	alert( 'Klient usunięty!');
+  		        });
+  		        XHR.addEventListener( 'error', function(event) {
+    	        	alert( 'Coś poszło nie tak' );
+  		        } );
+
+                var token = $("meta[name='_csrf']").attr("content"); 
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+		        XHR.open( 'DELETE', `/users/clients/`+id);
+  		        XHR.setRequestHeader( header, token );
+  		        XHR.send();
+
+                // window.location.reload(true);
+            }
+
+            function registerClient(event){
+                event.preventDefault();
+                
+                const XHR = new XMLHttpRequest();
+  		
+		        XHR.addEventListener( 'load', function(event) {
+    	        	alert( 'Klient zarejestrowany!');
+  		        });
+  
+                var dataToSend = $("#client-register").serialize();
+
+                var token = $("meta[name='_csrf']").attr("content"); 
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+		        XHR.open( 'PUT', `/users/clients`);
+  		        XHR.setRequestHeader( header, token );
+                XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  		        XHR.send(dataToSend);
+
+                console.log(dataToSend);
+            }
+
+            function processOkResponse(response = {}) {
+		        if (response.ok)
+      		        return response.json();
+                
+    	        throw new Error(`Status not 200 (${response.status})`);
+  	        }
+      </script>
+</body>
+</html>

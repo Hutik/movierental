@@ -30,7 +30,11 @@
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenu2">
 						  <li class="dropdown-item"><a class="nav-link"
-							th:href="@{settings}" th:text="#{settings}">Settings</a></li>
+							th:href="@{settings}" th:text="#{settings}">Settings</a>
+						  </li>
+						  <li class="dropdown-item"><a class="nav-link"
+							th:href="@{sellerPanel}" th:text="#{sellerPanel}">Seller Panel</a>
+						  </li>
 						  <li class="dropdown-item">
 							<form action="/logout" method="post">
 								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
@@ -38,7 +42,9 @@
 							</form>
 						</ul>
 					</div>
+                </nav>
 			</div>
+        </div>
 	</nav>
 
 	<footer th:fragment="footer">

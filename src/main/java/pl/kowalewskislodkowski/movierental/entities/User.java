@@ -4,8 +4,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -16,6 +19,9 @@ import javax.persistence.JoinColumn;
 @Table
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Basic(optional = false)
+    @Column(name = "id")
     Long id;
     @Column(unique=true)
     String username;
@@ -27,6 +33,8 @@ public class User {
     Set<Role> role = new HashSet<Role>();
     @Column(unique=true)
     String email;
+    String name;
+    String lastName;
     Date dateOfBirth;
     
     public Long getId() {
@@ -65,4 +73,17 @@ public class User {
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
 }
