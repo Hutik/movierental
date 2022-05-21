@@ -13,7 +13,7 @@
 		</br>
 		<div th:include="fragments/components :: footer"></div>
 	</div>
-	<script>
+	<script th:inline="javascript">
 
 		fetch('/films?new')
     		.then(processOkResponse)
@@ -30,7 +30,7 @@
 										${film.categories.map(category => {return `<button type="button" class="btn btn-outline-secondary btn-sm">${category.name}</button>`}).join("\n")}
 									</div>
 									<div class="card-footer">
-										<button type="button" class="btn btn-primary">Primary</button>
+										<button type="button" class="btn btn-primary" th:text="#{borrow}" >Borrow</button>
 										<small style="width: 100%" class="text-muted text-right">${film.price}</small>
 									</div>
 								</div>
