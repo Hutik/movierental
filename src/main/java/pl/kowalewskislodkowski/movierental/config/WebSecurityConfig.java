@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // .authorizeRequests().anyRequest().rememberMe()
             .and()
             .formLogin()
-            .loginPage("/login").loginProcessingUrl("/perform_login").defaultSuccessUrl("/")
+            .loginPage("/login").loginProcessingUrl("/perform_login").defaultSuccessUrl("/").failureForwardUrl("/")
             .permitAll()
             .and()
             .logout().permitAll();

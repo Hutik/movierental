@@ -1,9 +1,6 @@
 package pl.kowalewskislodkowski.movierental.entities.DTO;
 
 import java.util.Date;
-import java.util.Set;
-
-import pl.kowalewskislodkowski.movierental.entities.Role;
 import pl.kowalewskislodkowski.movierental.entities.User;
 
 public class ClientDTO{
