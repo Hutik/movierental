@@ -32,4 +32,8 @@ public class FilmServices {
         return ResponseEntity.ok(repo.findById(id));
     }
 
+    @GetMapping(params = {"new"})
+    private ResponseEntity<List<Film>> getNewFilms(){
+        return ResponseEntity.ok(repo.findByNewest(true));
+    }
 }

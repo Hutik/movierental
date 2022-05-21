@@ -15,7 +15,7 @@
 	</div>
 	<script>
 
-		fetch('/films')
+		fetch('/films?new')
     		.then(processOkResponse)
     		.then(films => {
         		var movies = films.map(film => {

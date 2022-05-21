@@ -15,4 +15,5 @@ public interface FilmRepository extends JpaRepository<Film, Integer>{
     List<Film> findAll();
     @EntityGraph(attributePaths = {"categories"})
     Optional<Film> findById(Integer id);
+    List<Film> findByNewest(boolean b);
 }

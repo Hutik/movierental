@@ -22,13 +22,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests().antMatchers("/h2-console/**").permitAll()
+            .authorizeRequests().antMatchers("/new_films**").permitAll()
             .and()
             .authorizeRequests().antMatchers("/").permitAll()
             .and()
             .authorizeRequests().antMatchers("/images/**").permitAll()
-            .and()
-            .authorizeHttpRequests().antMatchers(HttpMethod.DELETE, "/users/clients/**").authenticated()
             .and()
             .authorizeRequests().antMatchers(HttpMethod.GET, "/films").permitAll()
             .and()

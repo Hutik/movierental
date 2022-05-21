@@ -21,4 +21,9 @@ public class PagesController {
 		return "sellerPanel/sellerPanel";
 	}
 
+	@GetMapping("/new_films")
+	public String toNewFilms(){
+		return "new_films";
+	}
+
 }
