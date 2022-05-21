@@ -26,4 +26,9 @@ public class PagesController {
 		return "new_films";
 	}
 
+	@GetMapping("/borrow")
+	public String toBorrow(){
+		return "borrow";
+	}
+
 }

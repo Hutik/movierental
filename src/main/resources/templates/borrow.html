@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
+<title th:text="#{appName}">Movie Rental - VOP P</title>
+</head>
+<body>
+	<div th:replace="fragments/components :: navbar"></div>
+	<div class="container">
+		</br>
+		<div id="film"></div>
+		</br>
+		<div th:include="fragments/components :: footer"></div>
+	</div>
+	<script th:inline="javascript">
+
+		const queryString = window.location.search;
+		console.log(queryString);
+		const urlParams = new URLSearchParams(queryString);
+		console.log(urlParams.get('film_Id'));
+
+		fetch('/films/'+urlParams.get('film_Id'))
+    		.then(processOkResponse)
+    		.then(film => {document.getElementById('film').innerHTML=
+            		`<div class="card text-center">
+						${(film.newest)? '<span class="badge bg-success" th:text="#{new}">NEW</span>':''}
+  						<div class="card-header">
+    						${film.title}
+  						</div>
+  						<div class="card-body">
+							<p class="card-text">${film.description}</p>
+  						</div>
+  						<div class="card-footer" style="background: white">
+							${film.categories.map(category => {return `<button type="button" class="btn btn-outline-secondary btn-sm">${category.name}</button>`}).join("\n")}
+						</div>
+						<div class="card-footer">
+							<small style="width: 100%" class="text-muted text-right">${film.price}</small>
+						</div>`
+        		});
+
+
+	function processOkResponse(response = {}) {
+		if (response.ok)
+      		return response.json();
+    		
+    	throw new Error(`Status not 200 (${response.status})`);
+  	}
+	</script>
+</body>
+</html>

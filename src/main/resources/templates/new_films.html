@@ -21,7 +21,7 @@
         		var movies = films.map(film => {
             		return `<div class="col">
 								<div class="card h-100">
-									${(film.newest)? '<span class="badge bg-success">NEW</span>':''}
+									${(film.newest)? '<span class="badge bg-success" th:text="#{new}">NEW</span>':''}
 									<div class="card-body">
 				  						<h5 class="card-title">${film.title}</h5>
 				  						<p class="card-text">${film.description}</p>
@@ -30,7 +30,7 @@
 										${film.categories.map(category => {return `<button type="button" class="btn btn-outline-secondary btn-sm">${category.name}</button>`}).join("\n")}
 									</div>
 									<div class="card-footer">
-										<button type="button" class="btn btn-primary" th:text="#{borrow}" >Borrow</button>
+										<button type="button" class="btn btn-primary" th:text="#{borrow}" onclick="location.href='/borrow?film_Id=${film.id}'">Borrow</button>
 										<small style="width: 100%" class="text-muted text-right">${film.price}</small>
 									</div>
 								</div>
