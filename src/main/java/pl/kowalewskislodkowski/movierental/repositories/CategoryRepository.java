@@ -12,4 +12,5 @@ import pl.kowalewskislodkowski.movierental.entities.Category;
 public interface CategoryRepository extends JpaRepository<Category, Integer>{
     List<Category> findAll();
     Optional<Category> findById(Integer id);
+    List<Category> findByIdIn(List<Integer> categoriesId);
 }

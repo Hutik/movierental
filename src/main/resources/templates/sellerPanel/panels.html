@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
     <body>
         <form class="row g-3" th:fragment="client-register" id="client-register" onSubmit="registerClient(event)">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <div class="col-md-2">
               <label for="inputIndex" class="form-label" th:text="#{userName}">User Name</label>
               <input type="text" class="form-control" name="username">

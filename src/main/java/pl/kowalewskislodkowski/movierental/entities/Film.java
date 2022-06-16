@@ -1,10 +1,13 @@
 package pl.kowalewskislodkowski.movierental.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -13,12 +16,14 @@ import javax.persistence.Table;
 @Table
 public class Film {
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Basic(optional = false)
     Integer id;
     String title;
     String description;
     Float price;
     @ManyToMany(fetch = FetchType.LAZY)
-    Set<Category> categories = new HashSet<>();
+    List<Category> categories = new ArrayList<>();
     boolean newest;
     
     public Integer getId() {
@@ -45,10 +50,10 @@ public class Film {
     public void setPrice(Float price) {
         this.price = price;
     }
-    public Set<Category> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
     public boolean isNewest() {

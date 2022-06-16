@@ -1,27 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:layout="http://www.thymeleaf.org" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
-<title th:text="#{appName}">Movie Rental - VOP P</title>
+	<meta charset="UTF-8">
+	<script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
+	<title th:text="#{appName}">Movie Rental - VOP P</title>
+	<meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 	<div th:replace="fragments/components :: navbar"></div>
 	<div class="container">
-		</br>
+		<button class="btn btn-primary" sec:authorize='hasRole("ROLE_SELLER")' th:text="#{addFilm}" style="width: 100%; margin-top: 10px; margin-bottom: 10px;" onclick="startEditing(-1)">Add Film</button>
 		<div id="films" class="row row-cols-4 row-cols-md-4 g-4"></div>
 		</br>
 		<div th:include="fragments/components :: footer"></div>
 	</div>
+	<div sec:authorize='hasRole("ROLE_SELLER")' id="greyBackground" class="container-fluid invisible" onclick="stopEditing()" style="opacity: 0.5; position: fixed; top: 0%; left: 0%; width: 100%; height: 100%; background-color: black;"></div>
+  <div sec:authorize='hasRole("ROLE_SELLER")' id="editForm" class="container text-center invisible" style="position: fixed; top: 10%; left: 30%; width: 40%; height: 80%; background-color: azure; border-radius: 5%;">
+    <form id='indexForm'>
+		<div class="mb-3">
+		  <label for="formTitle" class="form-label" th:text="#{title}">Title</label>
+		  <input th:name="title" type="text" class="form-control" id="formTitle">
+		</div>
+		<div class="mb-3">
+		  <label for="formDescription" class="form-label" th:text="#{description}">Description</label>
+		  <input th:name="description" type="text" class="form-control" id="formDescription">
+		</div>
+		<div class="mb-3">
+		  <label for="formCategories" class="form-label" th:text="#{categories}">Categories</label>
+		  <select th:name="categories" type="select" class="form-control" id="formCategories" multiple></select>
+		</div>
+		<div class="mb-3">
+		  <label for="formPrice" class="form-label" th:text="#{price}">Price</label>
+		  <input th:name="price" type="number" step="0.01" class="form-control" id="formPrice">
+		</div>
+		<div class="mb-3 form-check">
+		  <input class="form-check-input" type="checkbox" id="flexCheckNew" name="new">
+		  <label class="form-check-label" for="flexCheckNew" th:text="#{new}">New</label>
+		</div>
+		<div class="mb-3">
+		  <button type="submit" class="btn btn-primary" th:text="#{save}">Submit</button>
+		</div>
+		<button class="btn btn-primary" sec:authorize='hasRole("ROLE_SELLER")' th:text="#{deleteFilm}" style="width: 100%; margin-top: 10px; margin-bottom: 10px;" onclick="startEditing(-1)">Delete</button>
+	  </form>
+  </div>
 	<script th:inline="javascript">
-
 		fetch('/films')
     		.then(processOkResponse)
     		.then(films => {
         		var movies = films.map(film => {
-            		return `<div class="col">
+            		return `<div class="col" ondblclick="startEditing(${film.id})">
 								<div class="card h-100">
-									${(film.newest)? '<span class="badge bg-success" th:text="#{new}">NEW</span>':''}
+									${(film.newest)? '<span class="badge bg-success">Nowość</span>':''}
 									<div class="card-body">
 				  						<h5 class="card-title">${film.title}</h5>
 				  						<p class="card-text">${film.description}</p>
@@ -30,16 +60,15 @@
 										${film.categories.map(category => {return `<button type="button" class="btn btn-outline-secondary btn-sm">${category.name}</button>`}).join("\n")}
 									</div>
 									<div class="card-footer">
-										<button type="button" class="btn btn-primary" th:text="#{borrow}" onclick="location.href='/borrow?film_Id=${film.id}'">Borrow</button>
-										<small style="width: 100%" class="text-muted text-right">${film.price}</small>
+										<button type="button" class="btn btn-primary" th:text="#{borrow}" onclick="location.href='/borrow?film_Id=${film.id}'">Wypożycz</button>
+										<small style="width: 100%; text-align: right;" class="text-muted text-right">${film.price}</small>
 									</div>
 								</div>
 							</div>`
         		}).join("\n");
 
 				document.getElementById('films').innerHTML=movies;
-    });
-
+    		});
 
 	function processOkResponse(response = {}) {
 		if (response.ok)
@@ -47,6 +76,75 @@
     		
     	throw new Error(`Status not 200 (${response.status})`);
   	}
+	</script>
+	<script sec:authorize='hasRole("SELLER")'>
+		fetch('/categories')
+		.then(processOkResponse)
+		.then(categories => {var categoriesList = categories.map(category => {
+			return `<option value='${category.id}'>${category.name}</option>`;
+			}).join("\n");
+
+			document.getElementById('formCategories').innerHTML=categoriesList;
+		});
+
+		function stopEditing(){
+    		document.getElementById('greyBackground').className=document.getElementById('greyBackground').className.replace(' visible', ' invisible');
+    		document.getElementById('editForm').className=document.getElementById('editForm').className.replace(' visible', ' invisible');
+
+			document.getElementById('formTitle').value=film.title;
+					document.getElementById('formDescription').value="";
+					
+					for(var i=0;i<formCategories.options.length;i++)
+						formCategories.options[i].selected=false;
+
+					document.getElementById("formPrice").value="";
+					document.getElementById('flexCheckNew').checked="";
+		}
+
+		function startEditing(index){
+        	document.getElementById('greyBackground').className=document.getElementById('greyBackground').className.replace(' invisible', ' visible');
+			document.getElementById('editForm').className=document.getElementById('editForm').className.replace(' invisible', ' visible');
+
+			document.getElementById('editForm').setAttribute('onsubmit', `updateFilm(event, ${index})`);
+
+			if(index!=-1)
+			fetch('/films/'+index)
+				.then(processOkResponse)
+				.then(film => {
+					document.getElementById('formTitle').value=film.title;
+					document.getElementById('formDescription').value=film.description;
+					
+					var formCategories = document.getElementById('formCategories');
+					
+					film.categories.forEach(category => {
+						for(var i=0;i<formCategories.options.length;i++)
+							if(formCategories.options[i].value==category.id) formCategories.options[i].selected=true;
+					});
+
+					document.getElementById("formPrice").value=film.price;
+
+					document.getElementById('flexCheckNew').checked=film.newest;
+
+				});
+
+    	}
+
+		function updateFilm(event, id){
+			event.preventDefault();
+
+			const XHR = new XMLHttpRequest();
+            var token = $("meta[name='_csrf']").attr("content"); 
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+			XHR.open( 'POST', id==-1? `/films`:`/films/`+id);
+	        XHR.setRequestHeader( header, token );
+			XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  		    XHR.send($('#indexForm').serialize());
+
+			stopEditing();
+		}
+
+
 	</script>
 </body>
 </html>

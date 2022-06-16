@@ -24,7 +24,7 @@
     		.then(processOkResponse)
     		.then(film => {document.getElementById('film').innerHTML=
             		`<div class="card text-center">
-						${(film.newest)? '<span class="badge bg-success" th:text="#{new}">NEW</span>':''}
+						${(film.newest)? '<span class="badge bg-success">Nowość</span>':''}
   						<div class="card-header">
     						${film.title}
   						</div>
