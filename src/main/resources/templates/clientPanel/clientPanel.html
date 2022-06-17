@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
+        <title th:text="#{appName}">Movie Rental - VOP P</title>
+        <meta th:name="_csrf" th:content="${_csrf.token}"/>
+        <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </head>
+<body>
+	<div th:replace="fragments/components :: navbar"></div>
+	<nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+          <button class="nav-link active" id="client-tab" data-bs-toggle="tab" data-bs-target="#nav-client" type="button" role="tab" aria-controls="nav-client" aria-selected="true" th:text="#{clients}">Clients</button>
+          <button class="nav-link" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false" th:text="#{registerClient}">Register Client</button>
+        </div>
+    </nav>
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-client" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="container">
+                <label hidden th:name="${_csrf.parameterName}" th:value="${_csrf.token}" id=csrf></label>
+                <table th:replace="clientPanel/panels :: user-edit"></table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
+            <div class="container">
+                <table th:replace="clientPanel/panels :: borrow-films-table"></table>
+            </div>
+        </div>
+      </div>
+      <script th:inline="javascript">
+            fetch("/users/currentUser")
+            .then(processOkResponse)
+            .then(user => {
+                document.getElementById('id').value=user.id;
+                document.getElementById('formFirstName').value=user.name;
+                document.getElementById('formLastName').value=user.lastName;
+                document.getElementById('formUsername').value=user.username;
+                document.getElementById('formEmail').value=user.email;
+                document.getElementById('formDate').value=user.dateOfBirth;
+
+                document.getElementById('user-edit').setAttribute('onsubmit', `updateUser(event, ${user.id})`);
+            });
+
+            function updateUser(event, id){
+                event.preventDefault();
+
+                const XHR = new XMLHttpRequest();
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+		        XHR.open( 'POST', `/users/`+id);
+  		        XHR.setRequestHeader( header, token );
+                  XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  		        XHR.send($('#user-edit').serialize());
+            }
+
+            function processOkResponse(response = {}) {
+		        if (response.ok)
+      		        return response.json();
+                
+    	        throw new Error(`Status not 200 (${response.status})`);
+  	        }
+
+            fetch("/users/currentUser/borrow_films")
+                .then(processOkResponse)
+                .then(films => {
+        		var movies = films.map(film => {
+            		return `<tr>
+                                <th scope="row">${film.id}</th>
+                                <td scope="row">${film.title}</td>
+                                <td scope="row">${film.description}</td>
+                                <td scope="row"><button class="btn btn-danger" onclick="removeBorrowFilm(event, ${film.id})">Usuń</button></td>
+                            </tr>`
+        		}).join("\n");
+
+				document.getElementById('rows-borrow-films-table').innerHTML=movies;
+    		});
+
+            function removeBorrowFilm(event, id){
+                event.preventDefault();
+
+                const XHR = new XMLHttpRequest();
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+		        XHR.open( 'DELETE', `/users/currentUser/borrow_films/`+id);
+  		        XHR.setRequestHeader( header, token );
+  		        XHR.send();
+            }
+      </script>
+</body>
+</html>

@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import pl.kowalewskislodkowski.movierental.entities.Film;
 import pl.kowalewskislodkowski.movierental.entities.Role;
 import pl.kowalewskislodkowski.movierental.entities.User;
 
@@ -29,6 +30,22 @@ public class MyUserPrincipal implements UserDetails{
         }
          
         return authorities;
+    }
+
+    public Long getId(){
+        return user.getId();
+    }
+
+    public boolean addBorrowFilm(Film film){
+        return user.addBorrowFilm(film);
+    }
+
+    public boolean removeBorrowFilm(Film film){
+        return user.removeBorrowFilm(film);
+    }
+
+    public List<Film> getBorroFilms(){
+        return user.getBorrowFilms();
     }
 
     @Override

@@ -1,7 +1,5 @@
 package pl.kowalewskislodkowski.movierental.controllers;
 
-import java.io.File;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -31,5 +29,10 @@ public class PagesController {
 	@GetMapping("/borrow")
 	public String toBorrow(){
 		return "borrow";
+	}
+
+	@GetMapping("/clientPanel")
+	public String toClientPanel(){
+	return "clientPanel/clientPanel";
 	}
 }

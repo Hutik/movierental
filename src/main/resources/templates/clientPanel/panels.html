@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+    <body>
+        <form class="row g-3" th:fragment="user-edit" id="user-edit">
+            <input type="number" hidden name="id" id="id">
+            <div class="col-md-4">
+              <label for="formFirstName" class="form-label" th:text="#{name}">First name</label>
+              <input type="text" class="form-control" id="formFirstName" name="name" required>
+            </div>
+            <div class="col-md-4">
+              <label for="formLastName" class="form-label" th:text="#{lastName}">Last name</label>
+              <input type="text" class="form-control" id="formLastName" name="lastName" required>
+            </div>
+            <div class="col-md-4">
+              <label for="formUsername" class="form-label" th:text="#{userName}">Username</label>
+                <input type="text" class="form-control" id="formUsername" name="username" aria-describedby="inputGroupPrepend2" required>
+            </div>
+            <div class="col-md-6">
+              <label for="formEmail" class="form-label">Email</label>
+                <div class="input-group">
+                    <span class="input-group-text" id="inputGroupPrepend3">@</span>
+                    <input type="text" class="form-control" id="formEmail" name="email" required>
+                </div>
+            </div>
+            <div class="col-md-3">
+              <label for="formDate" class="form-label" th:text="#{dateOfBirth}">Date Of Birth</label>
+              <input type="date" class="form-control" id="formDate" name="dateOfBirth" required>
+            </div>
+            <button class="btn btn-primary" type="submit" th:text="#{save}">Save</button>
+        </form>
+        <table th:fragment="borrow-films-table" class="table table-striped table-fixed table-hover">
+            <thead>  
+              <tr>
+                <th scope="col">ID</th>
+                <td scope="col" th:text="#{title}">Username</td>
+                <td scope="col" th:text="#{description}">Name</td>
+                <td scope="col" th:text="#{options}">Options</td>
+              </tr>
+            </thead>
+            <tbody id="rows-borrow-films-table"></tbody>
+          </table>
+        
+    </body>
+</html>

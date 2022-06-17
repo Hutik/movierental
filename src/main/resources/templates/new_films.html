@@ -135,6 +135,20 @@
 			stopEditing();
 		}
 
+		function deleteFilm(event, id){
+			event.preventDefault();
+
+			const XHR = new XMLHttpRequest();
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+			XHR.open( 'DELETE', `/films/`+id);
+	        XHR.setRequestHeader( header, token );
+			XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  		    XHR.send();
+
+			stopEditing();
+		}
 
 	</script>
 </body>

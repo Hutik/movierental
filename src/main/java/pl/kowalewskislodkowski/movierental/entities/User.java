@@ -1,7 +1,9 @@
 package pl.kowalewskislodkowski.movierental.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -36,7 +38,18 @@ public class User {
     String name;
     String lastName;
     Date dateOfBirth;
+    @ManyToMany
+    @JoinTable(name="user_films",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "film_id"))
+    List<Film> borrowFilms = new ArrayList<Film>();
     
+    public List<Film> getBorrowFilms() {
+        return borrowFilms;
+    }
+    public void setBorrowFilms(List<Film> borrowFilms) {
+        this.borrowFilms = borrowFilms;
+    }
     public Long getId() {
         return id;
     }
@@ -85,5 +98,10 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-    
+    public boolean addBorrowFilm(Film film){
+        return borrowFilms.add(film);
+    }
+    public boolean removeBorrowFilm(Film film){
+        return borrowFilms.remove(film);
+    }
 }

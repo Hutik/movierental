@@ -26,6 +26,9 @@
 							<span sec:authentication="principal.username">Username</span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end text-center" aria-labelledby="dropdownMenu2">
+							<li class="dropdown-item">
+								<a class="nav-link" th:href="@{clientPanel}" th:text="#{clientPanel}">Client Panel</a>
+							</li>
 							<li class="dropdown-item" sec:authorize="hasRole('SELLER')">
 								<a class="nav-link" th:href="@{sellerPanel}" th:text="#{sellerPanel}">Seller Panel</a>
 							</li>

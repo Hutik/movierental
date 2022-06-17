@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
-<title th:text="#{appName}">Movie Rental - VOP P</title>
+	<meta charset="UTF-8">
+	<script th:include="fragments/header :: headerScripts" th:remove="tag"></script>
+	<title th:text="#{appName}">Movie Rental - VOP P</title>
+	<meta th:name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 	<div th:replace="fragments/components :: navbar"></div>
 	<div class="container">
 		</br>
 		<div id="film"></div>
+		<button id="borrowFilm" class="btn btn-primary" th:text="#{borrow}" onclick="borrowFilm(event)">Borrow</button>
 		</br>
 		<div th:include="fragments/components :: footer"></div>
 	</div>
@@ -39,6 +42,20 @@
 						</div>`
         		});
 
+				// /currentUser/borrow_films
+
+				function borrowFilm(event){
+					event.preventDefault();
+
+                	const XHR = new XMLHttpRequest();
+                	var token = $("meta[name='_csrf']").attr("content");
+                	var header = $("meta[name='_csrf_header']").attr("content");
+
+		        	XHR.open( 'POST', `/users/currentUser/borrow_films`);
+  		        	XHR.setRequestHeader( header, token );
+                  	XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  		        	XHR.send(`id=`+urlParams.get('film_Id'));
+				}
 
 	function processOkResponse(response = {}) {
 		if (response.ok)

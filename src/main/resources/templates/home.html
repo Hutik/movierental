@@ -41,7 +41,7 @@
 		<div class="mb-3">
 		  <button type="submit" class="btn btn-primary" th:text="#{save}">Submit</button>
 		</div>
-		<button class="btn btn-primary" sec:authorize='hasRole("ROLE_SELLER")' th:text="#{deleteFilm}" style="width: 100%; margin-top: 10px; margin-bottom: 10px;" onclick="startEditing(-1)">Delete</button>
+		<button id="formDelete" class="btn btn-danger" th:text="#{deleteFilm}" style="width: 100%; margin-top: 10px; margin-bottom: 10px;">Delete</button>
 	  </form>
   </div>
 	<script th:inline="javascript">
@@ -106,6 +106,7 @@
 			document.getElementById('editForm').className=document.getElementById('editForm').className.replace(' invisible', ' visible');
 
 			document.getElementById('editForm').setAttribute('onsubmit', `updateFilm(event, ${index})`);
+			document.getElementById('formDelete').setAttribute('onclick', `deleteFilm(event, ${index})`);
 
 			if(index!=-1)
 			fetch('/films/'+index)
@@ -144,6 +145,20 @@
 			stopEditing();
 		}
 
+		function deleteFilm(event, id){
+			event.preventDefault();
+
+			const XHR = new XMLHttpRequest();
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+			XHR.open( 'DELETE', `/films/`+id);
+	        XHR.setRequestHeader( header, token );
+			XHR.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  		    XHR.send();
+
+			stopEditing();
+		}
 
 	</script>
 </body>
