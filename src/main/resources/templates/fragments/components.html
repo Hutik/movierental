@@ -33,9 +33,6 @@
 								<a class="nav-link" th:href="@{sellerPanel}" th:text="#{sellerPanel}">Seller Panel</a>
 							</li>
 							<hr>
-							<li class="dropdown-item"><a class="nav-link"
-								th:href="@{settings}" th:text="#{settings}">Settings</a>
-						  	</li>
 						  	<li class="dropdown-item">
 								<form action="/logout" method="post">
 									<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
